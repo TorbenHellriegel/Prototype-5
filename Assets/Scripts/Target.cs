@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
+    public ParticleSystem explosionParticle1;
+    public ParticleSystem explosionParticle2;
+    public int pointValue = 0;
+
+    private GameManager gameManager;
     private Rigidbody targetRb;
     private float minSpeed = 10;
     private float maxSpeed = 15;
@@ -14,6 +19,7 @@ public class Target : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         targetRb = GetComponent<Rigidbody>();
         
         transform.position = RandomSpawnPos();
@@ -31,12 +37,20 @@ public class Target : MonoBehaviour
     // Destroy game object when the player clicks it
     private void OnMouseDown()
     {
+        gameManager.UpdateScore(pointValue);
+        Instantiate(explosionParticle1, transform.position, explosionParticle1.transform.rotation);
+        Instantiate(explosionParticle2, transform.position, explosionParticle2.transform.rotation);
         Destroy(gameObject);
     }
 
     // Destroy game object when it collides with the sensor
+    // Also decrease score when the player missed good food
     private void OnTriggerEnter(Collider other)
     {
+        if(gameObject.CompareTag("Good"))
+        {
+            gameManager.UpdateScore(-pointValue);
+        }
         Destroy(gameObject);
     }
 
