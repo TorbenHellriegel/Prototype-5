@@ -35,21 +35,26 @@ public class Target : MonoBehaviour
     }
 
     // Destroy game object when the player clicks it
+    // Also increase/decrease score when the player clicks good/bad food
     private void OnMouseDown()
     {
-        gameManager.UpdateScore(pointValue);
-        Instantiate(explosionParticle1, transform.position, explosionParticle1.transform.rotation);
-        Instantiate(explosionParticle2, transform.position, explosionParticle2.transform.rotation);
-        Destroy(gameObject);
+        if(gameManager.isGameActive)
+        {
+            gameManager.UpdateScore(pointValue);
+            Instantiate(explosionParticle1, transform.position, explosionParticle1.transform.rotation);
+            Instantiate(explosionParticle2, transform.position, explosionParticle2.transform.rotation);
+            Destroy(gameObject);
+        }
     }
 
     // Destroy game object when it collides with the sensor
-    // Also decrease score when the player missed good food
+    // Also decrease lives when the player missed good food
     private void OnTriggerEnter(Collider other)
     {
-        if(gameObject.CompareTag("Good"))
+        if(gameObject.CompareTag("Good") && gameManager.isGameActive)
         {
             gameManager.UpdateScore(-pointValue);
+            gameManager.UpdateLives(1);
         }
         Destroy(gameObject);
     }
