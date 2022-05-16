@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
@@ -10,10 +11,14 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI livesText;
     public TextMeshProUGUI gameOvertext;
+    public TextMeshProUGUI pausedText;
+    public Slider volumeSlider;
     public GameObject restartButton;
     public GameObject titleScreen;
     public bool isGameActive;
+    public bool timePaused = false;
 
+    private AudioSource audioSource;
     private int score;
     private int lives;
     private float spawnRate = 4;
@@ -21,13 +26,26 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        audioSource = GameObject.Find("Main Camera").GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        audioSource.volume = volumeSlider.value;
+
+        if(Input.GetKeyDown(KeyCode.Space) && !timePaused && isGameActive)
+        {
+            pausedText.gameObject.SetActive(true);
+            timePaused = true;
+            Time.timeScale = 0;
+        }
+        else if(Input.GetKeyDown(KeyCode.Space) && timePaused && isGameActive)
+        {
+            pausedText.gameObject.SetActive(false);
+            timePaused = false;
+            Time.timeScale = 1;
+        }
     }
 
     // Spawns random targets every few seconds

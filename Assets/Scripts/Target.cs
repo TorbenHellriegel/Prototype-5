@@ -38,7 +38,7 @@ public class Target : MonoBehaviour
     // Also increase/decrease score when the player clicks good/bad food
     private void OnMouseDown()
     {
-        if(gameManager.isGameActive)
+        if(gameManager.isGameActive && !gameManager.timePaused)
         {
             gameManager.UpdateScore(pointValue);
             Instantiate(explosionParticle1, transform.position, explosionParticle1.transform.rotation);
