@@ -36,9 +36,9 @@ public class Target : MonoBehaviour
 
     // Destroy game object when the player clicks it
     // Also increase/decrease score when the player clicks good/bad food
-    private void OnMouseDown()
+    private void OnMouseEnter()
     {
-        if(gameManager.isGameActive && !gameManager.timePaused)
+        if(gameManager.isGameActive && !gameManager.timePaused && Input.GetMouseButton(0))
         {
             gameManager.UpdateScore(pointValue);
             Instantiate(explosionParticle1, transform.position, explosionParticle1.transform.rotation);
