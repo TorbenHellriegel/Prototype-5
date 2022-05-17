@@ -19,6 +19,7 @@ public class TrailFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Enables the trail as long as the mouse button is pressed
         if(Input.GetMouseButtonDown(0))
         {
             trail.enabled = true;
@@ -29,6 +30,7 @@ public class TrailFollow : MonoBehaviour
             trail.enabled = false;
         }
 
+        // Set the trail position to the mouse position
         mousePos = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
         transform.position = mousePos;
     }

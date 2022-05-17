@@ -3757,6 +3757,7 @@ MonoBehaviour:
   titleScreen: {fileID: 1787702709}
   isGameActive: 0
   timePaused: 0
+  aimBotOn: 0
 --- !u!4 &1847694385
 Transform:
   m_ObjectHideFlags: 0

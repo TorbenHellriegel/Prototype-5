@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public GameObject titleScreen;
     public bool isGameActive;
     public bool timePaused = false;
+    public bool aimBotOn = false;
 
     private AudioSource audioSource;
     private int score;
@@ -32,8 +33,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Set volume to slider value
         audioSource.volume = volumeSlider.value;
 
+        // Pauses and unpauses the game when space is pressen
         if(Input.GetKeyDown(KeyCode.Space) && !timePaused && isGameActive)
         {
             pausedText.gameObject.SetActive(true);
@@ -45,6 +48,12 @@ public class GameManager : MonoBehaviour
             pausedText.gameObject.SetActive(false);
             timePaused = false;
             Time.timeScale = 1;
+        }
+
+        // Go back to main screen when escape is pressed
+        if(isGameActive && Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 
@@ -103,13 +112,25 @@ public class GameManager : MonoBehaviour
         titleScreen.gameObject.SetActive(false);
 
         isGameActive = true;
+        timePaused = false;
+        Time.timeScale = 1;
 
         score = 0;
         UpdateScore(0);
         lives = 3;
         UpdateLives(0);
 
-        spawnRate /= difficulty;
-        StartCoroutine("SpawnTarget");
+        // If aimbot difficulty was selected activate aimbot
+        if(difficulty == 1)
+        {
+            aimBotOn = true;
+            spawnRate = 0.1f;
+            StartCoroutine("SpawnTarget");
+        }
+        else
+        {
+            spawnRate /= difficulty;
+            StartCoroutine("SpawnTarget");
+        }
     }
 }

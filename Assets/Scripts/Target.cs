@@ -15,6 +15,7 @@ public class Target : MonoBehaviour
     private float maxTorque = 10;
     private float xRange = 4;
     private float ySpawnPos = -2;
+    private float aimBotDestructionTimer = 3;
 
     // Start is called before the first frame update
     void Start()
@@ -22,8 +23,8 @@ public class Target : MonoBehaviour
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         targetRb = GetComponent<Rigidbody>();
         
+        // Starts the object of with a random starting position and torque
         transform.position = RandomSpawnPos();
-
         targetRb.AddForce(RandomForce(), ForceMode.Impulse);
         targetRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);
     }
@@ -31,7 +32,16 @@ public class Target : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        aimBotDestructionTimer -= Time.deltaTime;
+
+        // Destroys the good food after a certain time when aimbot is on
+        if(aimBotDestructionTimer < 2 && gameManager.aimBotOn && gameObject.CompareTag("Good"))
+        {
+            gameManager.UpdateScore(pointValue);
+            Instantiate(explosionParticle1, transform.position, explosionParticle1.transform.rotation);
+            Instantiate(explosionParticle2, transform.position, explosionParticle2.transform.rotation);
+            Destroy(gameObject);
+        }
     }
 
     // Destroy game object when the player clicks it
